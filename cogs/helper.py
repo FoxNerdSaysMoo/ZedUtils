@@ -1,6 +1,7 @@
 from discord.ext.commands import errors
 from discord.ext import commands
 import discord
+from discord import Color
 
 
 def setup(bot):
@@ -18,7 +19,7 @@ async def prefix_base(ctx):
 
 
 class Helper(commands.Cog):
-    """https://github.com/foxnerdsaysmoo/zedutils#helper"""
+    """helper"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -26,17 +27,15 @@ class Helper(commands.Cog):
     @commands.command(name='invite')
     async def invite(self, ctx):
         """Get invite link for ZedUtils"""
-        msg = 'To invite ZedUtils, go to: https://discord.com/oauth2/authorize?client_id=746465008967221259&scope=bot'
-        await ctx.send(msg)
+        embed = discord.Embed(title="Invite ZedUtils",
+                              description="[Top.gg](https://top.gg/bot/746465008967221259)",
+                              color=Color.from_rgb(230, 230, 230))
+        await ctx.send(embed=embed)
 
     @commands.group(name='prefix', invoke_without_command=True)
     async def prefix(self, ctx):
         """
-        **Prefix commands**
-        prefix
-        prefix list
-        prefix add [prefix]
-        prefix remove [prefix]
+        Prefix commands
         """
         await ctx.invoke(self.list_)
 
@@ -70,7 +69,7 @@ class Helper(commands.Cog):
     async def remove(self, ctx, *, prefix: str = None):
         if prefix is None:
             await ctx.send(
-                f'Please add a prefix with your command. `>prefix add [prefix here]`'
+                'Please add a prefix with your command. `>prefix add [prefix here]`'
             )
             return
 
@@ -92,12 +91,20 @@ class Helper(commands.Cog):
         """Show this message"""
         if not cog:
             help_embed = discord.Embed(title='ZedUtil Cog Listings',
-                                       description='Use `>help [cog]` to find out more about them!')
+                                       description='Use `>help [cog]` to find out more about them!',
+                                       color=Color.darker_gray())
+
+            help_embed.set_author(name=f'{ctx.message.content}',
+                                  icon_url=ctx.author.avatar_url,
+                                  url="https://github.com/foxnerdsaysmoo/zedutils#features")
 
             cogs_desc = ''
             for x in self.bot.cogs:
                 if not hasattr(self.bot.cogs[x], 'hidden'):
-                    cogs_desc += ('[{}]({})'.format(x, self.bot.cogs[x].__doc__) + '\n')
+                    cogs_desc += '[{}]({})'.format(
+                        x,
+                        "https://github.com/foxnerdsaysmoo/zedutils#" + self.bot.cogs[x].__doc__
+                    ) + '\n'
             help_embed.add_field(name='Cogs', value=cogs_desc[0:len(cogs_desc) - 1], inline=False)
 
             await ctx.send(embed=help_embed)
@@ -106,14 +113,24 @@ class Helper(commands.Cog):
             for x, i in self.bot.cogs.items():
                 if x.lower() == cog.lower():
                     if not hasattr(self.bot.cogs[x], 'hidden'):
-                        help_embed = discord.Embed(title=f'{x} Command Listings',
-                                                   url=self.bot.cogs[x].__doc__)
+                        url = "https://github.com/foxnerdsaysmoo/zedutils#" + self.bot.cogs[x].__doc__
+                        help_embed = discord.Embed(title=f'{x} help',
+                                                   url=url,
+                                                   color=Color.darker_gray())
+                        help_embed.set_author(name=f'{ctx.message.content}',
+                                              icon_url=ctx.author.avatar_url,
+                                              url=url)
                     else:
                         help_embed = discord.Embed(title=f'{x}',
-                                                   description=self.bot.cogs[x].__doc__)
-                        for c in i.get_commands():
-                            if not c.hidden:
-                                help_embed.add_field(name=f'{c.name}', value=str(c.help), inline=False)
+                                                   description=self.bot.cogs[x].__doc__,
+                                                   color=Color.darker_gray())
+                    commands_ = ''
+                    for c in i.get_commands():
+                        if not c.hidden:
+                            commands_ += f'**{c.name}** - {c.help}\n'
+
+                    help_embed.add_field(name='Commands', value=commands_)
+
                     found = True
 
             if not found:

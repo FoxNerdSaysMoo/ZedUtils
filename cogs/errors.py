@@ -80,4 +80,3 @@ class ErrorHandler(Cog):
             ctx,
             msg
         )
-

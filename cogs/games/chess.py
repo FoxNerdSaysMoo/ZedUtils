@@ -14,7 +14,7 @@ def setup(bot: Bot):
 
 
 class Chess(Cog):
-    """https://github.com/foxnerdsaysmoo/zedutils#chess"""
+    """chess"""
     def __init__(self, bot: Bot):
         self.bot = bot
         self.max_games = 10

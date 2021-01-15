@@ -1,0 +1,3 @@
+chess
+cairosvg
+discord

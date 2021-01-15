@@ -12,7 +12,7 @@ def setup(bot):
 
 
 class Chatter(commands.Cog):
-    """https://github.com/foxnerdsaysmoo/zedutils#chatter"""
+    """chatter"""
     def __init__(self, bot):
         self.bot = bot
         self.volume = 1.0
@@ -96,10 +96,7 @@ class Chatter(commands.Cog):
     @commands.command(name='rate')
     async def rate_cmd(self, ctx, rate: int = None):
         """
-        rate
-        View current rate
-        rate [value]
-        set rate to value (value must be > 80 and < 300)
+        View or modify voice rate
         """
         if rate is None:
             rate = self.rate
