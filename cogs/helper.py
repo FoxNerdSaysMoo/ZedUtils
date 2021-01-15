@@ -18,7 +18,7 @@ async def prefix_base(ctx):
 
 
 class Helper(commands.Cog):
-    """Help commands"""
+    """https://github.com/foxnerdsaysmoo/zedutils#helper"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -97,7 +97,7 @@ class Helper(commands.Cog):
             cogs_desc = ''
             for x in self.bot.cogs:
                 if not hasattr(self.bot.cogs[x], 'hidden'):
-                    cogs_desc += ('{} - {}'.format(x, self.bot.cogs[x].__doc__) + '\n')
+                    cogs_desc += ('[{}]({})'.format(x, self.bot.cogs[x].__doc__) + '\n')
             help_embed.add_field(name='Cogs', value=cogs_desc[0:len(cogs_desc) - 1], inline=False)
 
             await ctx.send(embed=help_embed)
@@ -105,11 +105,15 @@ class Helper(commands.Cog):
             found = False
             for x, i in self.bot.cogs.items():
                 if x.lower() == cog.lower():
-                    help_embed = discord.Embed(title=x + ' Command Listing',
-                                               description=self.bot.cogs[x].__doc__)
-                    for c in i.get_commands():
-                        if not c.hidden:
-                            help_embed.add_field(name=f'{c.name}', value=str(c.help), inline=False)
+                    if not hasattr(self.bot.cogs[x], 'hidden'):
+                        help_embed = discord.Embed(title=f'{x} Command Listings',
+                                                   url=self.bot.cogs[x].__doc__)
+                    else:
+                        help_embed = discord.Embed(title=f'{x}',
+                                                   description=self.bot.cogs[x].__doc__)
+                        for c in i.get_commands():
+                            if not c.hidden:
+                                help_embed.add_field(name=f'{c.name}', value=str(c.help), inline=False)
                     found = True
 
             if not found:

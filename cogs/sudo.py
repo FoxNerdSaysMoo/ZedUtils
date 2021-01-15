@@ -11,6 +11,8 @@ def setup(bot):
 
 class Sudo(commands.Cog):
     """Bot control commands (bot managers only)"""
+    hidden = True
+
     def __init__(self, bot):
         self.bot = bot
         self.admins = [515854207837011970]
@@ -70,4 +72,3 @@ class Sudo(commands.Cog):
             value = 0
         settings[key] = value
         await ctx.send(f':white_check_mark: Set {key} to {value}')
-

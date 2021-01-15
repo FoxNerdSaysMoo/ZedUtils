@@ -8,7 +8,10 @@ ZedUtils is a capable, database-free, python discord bot.
 git clone https://github.com/foxnerdsaysmoo/zedutils
 ```
 ### To set up:
-Make a discord application from the discord developer portal. Add a bot, copy the bot token. Then run (linux only):
+Make a discord application from the discord developer portal.
+Add a bot, copy the bot token.
+
+Then run (linux only):
 ```bash
 export ZEDUTILS_TOKEN='your token'
 ```
@@ -18,16 +21,22 @@ export ZEDUTILS_TOKEN='your token'
 python main.py
 ```
 
-## Features
+## Cogs
 
-### Customizable prefixes
+### Helper
+`help` - Shows cog listings with references to readme
+
+`help [cog]` - Shows given cog's command listings
+
 `prefix` - list prefixes
 
 `prefix add [prefix]` - add a new prefix for in the server
 
 `prefix remove [prefix]` - remove prefix from the server (do not delete them all)
 
-### TTS
+### Chatter
+**TTS commands**
+
 `connect` - join voice channel with you
 
 `connect [vc]` - join given voice channel
@@ -40,9 +49,10 @@ python main.py
 
 `disconnect` - disconnect from voice channel
 
-### Chess games
+### Chess
+**Chess games**
 
-`chess/challenge/playchess [user]` - challenge use at a chess game
+`chess/challenge/playchess [user]` - challenge user at a chess game
 
 Say your move when it's your turn (uci notation):
 
@@ -53,4 +63,4 @@ Say your move when it's your turn (uci notation):
 `a1c2` - Move piece from a1 to c2
 
 Draws and checkmate detection is automatic.
-
+Only one game can be played per text channel

@@ -12,7 +12,7 @@ def setup(bot):
 
 
 class Chatter(commands.Cog):
-    """"""
+    """https://github.com/foxnerdsaysmoo/zedutils#chatter"""
     def __init__(self, bot):
         self.bot = bot
         self.volume = 1.0
@@ -20,7 +20,7 @@ class Chatter(commands.Cog):
 
     @commands.command(name='connect')
     async def connect_(self, ctx, channel: discord.VoiceChannel = None):
-        """"""
+        """Make ZedUtils join a voice channel"""
         if not channel:
             try:
                 channel = ctx.author.voice.channel
