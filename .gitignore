@@ -4,7 +4,14 @@ chess/**
 # TTS files
 *.mp3
 
+# Python venv
 venv/
 
+# Python binaries
 **/__pycache__/
+
+# IDE stuff
 .idea/
+
+# Server data
+settings.json
