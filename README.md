@@ -2,6 +2,8 @@
 ## Overview
 ZedUtils is a capable, database-free, python discord bot.
 
+### Go to [cogs](#cogs) to view commands
+
 ## Usage
 ### To get files:
 ```bash
