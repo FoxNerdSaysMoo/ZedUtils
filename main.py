@@ -21,6 +21,7 @@ class Bot(commands.Bot):
             "cogs.helper",
             "cogs.errors",
             "cogs.games.chess",
+            "cogs.utils",
         ]
 
         for cog in self.cogs_list:

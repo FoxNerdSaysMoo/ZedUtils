@@ -64,3 +64,10 @@ Say your move when it's your turn (uci notation):
 
 Draws and checkmate detection is automatic.
 Only one game can be played per text channel
+
+### Utils
+`pfp [optionsl: user]` - get given user's pfp, else yours
+
+`rr create [name]` - create reaction role embed
+
+`rr add [emoji] [name] [role]` - add reaction role option
