@@ -25,6 +25,7 @@ class Economy(Cog):
 
     @command(name='bank')
     async def bank(self, ctx, user: User = None):
+        """View your or another user's economy stats"""
         if user is None:
             user = ctx.author
 
@@ -65,6 +66,7 @@ class Economy(Cog):
     @command(name='coin-give', aliases=['coins-give', 'coin-add', 'coins-add'])
     @has_permissions(administrator=True)
     async def coin_give(self, ctx, user: User, amount: int):
+        """Give coins to a user"""
         if str(user.id) not in settings[str(ctx.guild.id)]:
             settings[str(ctx.guild.id)][str(user.id)] = default
 
@@ -79,6 +81,7 @@ class Economy(Cog):
     @command(name='coin-remove', aliases=['coins-remove', 'coin-take'])
     @has_permissions(administrator=True)
     async def coin_remove(self, ctx, user: User, amount: int):
+        """Remove coins from user"""
         if str(user.id) not in settings[str(ctx.guild.id)]:
             settings[str(ctx.guild.id)][str(user.id)] = default
 
@@ -92,6 +95,7 @@ class Economy(Cog):
 
     @command(name='coin-flip')
     async def coin_flip(self, ctx, wager: int):
+        """Take a 50-50 chance to win or lose a wager"""
         wager = abs(wager)
 
         if str(ctx.author.id) not in settings[str(ctx.guild.id)]:

@@ -54,7 +54,7 @@ python main.py
 ### Chess
 **Chess games**
 
-`chess/challenge/playchess [user]` - challenge user at a chess game
+`chess/challenge/playchess [user] [optional: wager]` - challenge user at a chess game
 
 Say your move when it's your turn (uci notation):
 
@@ -65,11 +65,21 @@ Say your move when it's your turn (uci notation):
 `a1c2` - Move piece from a1 to c2
 
 Draws and checkmate detection is automatic.
-Only one game can be played per text channel
+Only one game can be played per text channel.
+The wager will be given or removed from your bank.
 
 ### Utils
-`pfp [optionsl: user]` - get given user's pfp, else yours
+`pfp [optional: user]` - get given user's pfp, else yours
 
 `rr create [name]` - create reaction role embed
 
 `rr add [emoji] [name] [role]` - add reaction role option
+
+### Economy
+`bank [optional: user]` - view your or another user's stats
+
+`coin-give [user] [amount]` - give coins to user
+
+`coin-remove [user] [amount]` - remove coins from user
+
+`coin-flip [wager]` - take a chance to win or lose a wager
