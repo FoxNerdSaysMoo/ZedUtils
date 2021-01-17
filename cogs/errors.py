@@ -31,6 +31,9 @@ class ErrorHandler(Cog):
         elif isinstance(exception, errors.CheckFailure):
             await self.handle_check_failure(ctx, exception)
             return
+        elif isinstance(exception, errors.CommandOnCooldown):
+            await self.handle_cooldown_error(ctx, exception)
+            return
 
         await send_error_embed(
             ctx,
@@ -79,4 +82,10 @@ class ErrorHandler(Cog):
         await send_error_embed(
             ctx,
             msg
+        )
+
+    async def handle_cooldown_error(self, ctx: Context, exception: errors.CommandOnCooldown):
+        await send_error_embed(
+            ctx,
+            "This command is on cooldown for another {} seconds. Please try again later.".format(exception.retry_after)
         )

@@ -78,6 +78,8 @@ The wager will be given or removed from your bank.
 ### Economy
 `bank [optional: user]` - view your or another user's stats
 
+`work` - work and gain money (chance for promotion)
+
 `coin-give [user] [amount]` - give coins to user
 
 `coin-remove [user] [amount]` - remove coins from user

@@ -121,18 +121,11 @@ class Chess(Cog):
             color=Color.from_rgb(60, 219, 35)
         )
 
-        default = {
-            'coins': 0,
-            'medals': (0, 0, 0, 0),
-            'boosts': [],
-            'active_boosts': [],
-            'color': None
-        }
         if winner.id not in settings[str(ctx.guild.id)]:
-            settings[str(ctx.guild.id)][str(winner.id)] = default
+            settings[str(ctx.guild.id)][str(winner.id)] = settings['default_economy']
             await settings.save()
         if loser.id not in settings[str(ctx.guild.id)]:
-            settings[str(ctx.guild.id)][str(loser.id)] = default
+            settings[str(ctx.guild.id)][str(loser.id)] = settings['default_economy']
             await settings.save()
 
         settings[str(ctx.guild.id)][str(winner.id)]['coins'] += wager
