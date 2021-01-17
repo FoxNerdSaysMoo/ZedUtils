@@ -145,3 +145,13 @@ class Helper(Cog):
             msg = await message.channel.send('You can get my help message using `>help`')
             await asyncio.sleep(settings['msg_timeout'])
             await msg.delete()
+
+    @Cog.listener()
+    async def on_guild_join(self, guild):
+        settings[str(guild.id)] = {}
+        await settings.save()
+
+    @Cog.listener()
+    async def on_guild_leave(self, guild):
+        settings.pop(str(guild.id))
+        await settings.save()

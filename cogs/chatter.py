@@ -27,7 +27,6 @@ class Chatter(commands.Cog):
             except AttributeError:
                 raise errors.ChannelNotFound('No channel to join. Please either join or specify a channel.')
 
-        await ctx.send(f'Connecting to **`{channel.name}`**')
         await channel.connect()
 
         while ctx.author.voice is not None:
