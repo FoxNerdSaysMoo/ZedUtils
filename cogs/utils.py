@@ -92,6 +92,24 @@ class Utils(Cog):
 
             if str(reaction) in dict(rr_settings).keys():
                 guild = self.bot.get_guild(payload.guild_id)
-                user = guild.get_member(payload.user_id)
+                user = utils.get(guild.members, id=payload.user_id)
 
                 await Member.add_roles(user, utils.get(guild.roles, id=dict(rr_settings)[str(reaction)]))
+
+    @Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        if payload.user_id == self.bot.user.id:
+            return
+
+        reaction = payload.emoji
+        msg_id = str(payload.message_id)
+
+        if msg_id in settings['reaction_roles'].keys():
+            rr_settings = settings['reaction_roles'][msg_id]
+
+            if str(reaction) in dict(rr_settings).keys():
+                guild = self.bot.get_guild(payload.guild_id)
+                user = utils.get(guild.members, id=payload.user_id)
+
+                await Member.remove_roles(user, utils.get(guild.roles, id=dict(rr_settings)[str(reaction)]))
+

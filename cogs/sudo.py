@@ -15,7 +15,7 @@ class Sudo(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.admins = [515854207837011970]
+        self.owners = [515854207837011970]
 
     @commands.group(name='sudo')
     async def sudo(self, ctx):
@@ -31,7 +31,7 @@ class Sudo(commands.Cog):
     @sudo.command(name='status')
     async def set_status(self, ctx, act_type: str, *, name: str):
         """Set status of ZedUtils"""
-        if ctx.author.id not in self.admins:
+        if ctx.author.id not in self.owners:
             raise errors.NotOwner
 
         try:
@@ -45,7 +45,7 @@ class Sudo(commands.Cog):
     @sudo.command(name='reload')
     async def reload_cogs(self, ctx):
         """Reload cogs without restarting bot"""
-        if ctx.author.id not in self.admins:
+        if ctx.author.id not in self.owners:
             raise errors.NotOwner
 
         for cog in self.bot.cogs_list:
@@ -56,7 +56,7 @@ class Sudo(commands.Cog):
     @sudo.command(name='save')
     async def save_settings(self, ctx):
         """Save ZedUtils settings"""
-        if ctx.author.id not in self.admins:
+        if ctx.author.id not in self.owners:
             raise errors.NotOwner
 
         await settings.save()
@@ -65,7 +65,7 @@ class Sudo(commands.Cog):
     @sudo.command(name='set')
     async def set_timout(self, ctx, key: str = None, value: int = None):
         """Set settings value"""
-        if ctx.author.id not in self.admins:
+        if ctx.author.id not in self.owners:
             raise errors.NotOwner
 
         if value is None:

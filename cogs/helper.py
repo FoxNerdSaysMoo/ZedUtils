@@ -141,4 +141,4 @@ class Helper(Cog):
     @Cog.listener()
     async def on_message(self, message):
         if self.bot.user.mentioned_in(message):
-            await message.send('You can get my help message using `>help`')
+            await message.channel.send('You can get my help message using `>help`')
