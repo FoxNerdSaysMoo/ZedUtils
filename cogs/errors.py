@@ -9,7 +9,7 @@ def setup(bot):
 
 async def send_error_embed(ctx: Context, message: str):
     embed = Embed(
-        title='`{}`'.format(ctx.message.content),
+        title='`{}`'.format(ctx.message.content[:240]),
         description=message,
         color=Color.red()
     )

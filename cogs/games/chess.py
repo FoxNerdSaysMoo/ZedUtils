@@ -21,8 +21,8 @@ class Chess(Cog):
         self.active_games = {}
 
     @command(name='chess', aliases=['challenge', 'playchess'])
-    async def chess(self, ctx: Context, opponent: Member):
-        embed = Embed(title=f'{str(ctx.author)} has challenged {str(opponent)}',
+    async def chess(self, ctx: Context, opponent: Member, wager: int = 0):
+        embed = Embed(title=f'{str(ctx.author)} has challenged {str(opponent)} with a wager of {wager} coins',
                       description=f'''React to accept the challenge
                       **{settings["chess_challenge_timeout"]} seconds to accept**''')
         chal = await ctx.send('A challenge has been made', embed=embed)
@@ -91,7 +91,7 @@ class Chess(Cog):
                 if board.is_stalemate():
                     await self.stalemate(board, ctx)
                 elif board.is_checkmate():
-                    await self.checkmate(board, ctx, ctx.author, opponent)
+                    await self.checkmate(board, ctx, ctx.author, opponent, wager)
 
             curr_player = ctx.author if curr_player != ctx.author else opponent
 
@@ -110,12 +110,32 @@ class Chess(Cog):
         )
         await ctx.send(embed=embed)
 
-    async def checkmate(self, board, ctx, p1, p2):
+    async def checkmate(self, board, ctx, p1, p2, wager):
         result = board.result()
         winner = p1 if result == '1-0' else p2
+        loser = p1 if winner != p1 else p2
+
         embed = Embed(
             title=f"Checkmate by {str(winner)}!",
-            description=f"```\n{', '.join([str(i) for i in board.move_stack])}```",
+            description=f"Winner won {wager}\n```\n{', '.join([str(i) for i in board.move_stack])}```",
             color=Color.from_rgb(60, 219, 35)
         )
+
+        default = {
+            'coins': 0,
+            'medals': (0, 0, 0, 0),
+            'boosts': [],
+            'active_boosts': [],
+            'color': None
+        }
+        if winner.id not in settings[str(ctx.guild.id)]:
+            settings[str(ctx.guild.id)][str(winner.id)] = default
+            await settings.save()
+        if loser.id not in settings[str(ctx.guild.id)]:
+            settings[str(ctx.guild.id)][str(loser.id)] = default
+            await settings.save()
+
+        settings[str(ctx.guild.id)][str(winner.id)]['coins'] += wager
+        settings[str(ctx.guild.id)][str(loser.id)]['coins'] -= wager
+
         await ctx.send(embed=embed)

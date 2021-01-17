@@ -1,11 +1,13 @@
-from discord.ext.commands import command, Cog, Bot, has_permissions
+from discord.ext.commands import command, Cog, Bot, has_permissions, errors
 from discord import User, Embed, Color
+import random
 
 
 def setup(bot: Bot):
     global settings
     settings = bot.settings
     bot.add_cog(Economy(bot))
+
 
 default = {
     'coins': 0,
@@ -60,7 +62,7 @@ class Economy(Cog):
 
         await ctx.send(embed=embed)
 
-    @command(name='coin-give')
+    @command(name='coin-give', aliases=['coins-give', 'coin-add', 'coins-add'])
     @has_permissions(administrator=True)
     async def coin_give(self, ctx, user: User, amount: int):
         if str(user.id) not in settings[str(ctx.guild.id)]:
@@ -68,9 +70,13 @@ class Economy(Cog):
 
         settings[str(ctx.guild.id)][str(user.id)]['coins'] += abs(amount)
 
-        await ctx.send(f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins")
+        embed = Embed(title="Coins added",
+                      description=f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins",
+                      color=Color.green())
 
-    @command(name='coin-remove')
+        await ctx.send(embed=embed)
+
+    @command(name='coin-remove', aliases=['coins-remove', 'coin-take'])
     @has_permissions(administrator=True)
     async def coin_remove(self, ctx, user: User, amount: int):
         if str(user.id) not in settings[str(ctx.guild.id)]:
@@ -78,4 +84,39 @@ class Economy(Cog):
 
         settings[str(ctx.guild.id)][str(user.id)]['coins'] -= abs(amount)
 
-        await ctx.send(f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins")
+        embed = Embed(title="Coins removed",
+                      description=f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins",
+                      color=Color.red())
+
+        await ctx.send(embed=embed)
+
+    @command(name='coin-flip')
+    async def coin_flip(self, ctx, wager: int):
+        wager = abs(wager)
+
+        if str(ctx.author.id) not in settings[str(ctx.guild.id)]:
+            settings[str(ctx.guild.id)][str(ctx.author.id)] = default
+
+        stats = settings[str(ctx.guild.id)][str(ctx.author.id)]
+
+        if wager > stats['coins']:
+            raise errors.UserInputError('Your wager is larger than your coin amount')
+
+        if random.choice([True, False]):
+            settings[str(ctx.guild.id)][str(ctx.author.id)]['coins'] += wager
+
+            embed = Embed(
+                title="You won!",
+                description=f"{ctx.author} now has {settings[str(ctx.guild.id)][str(ctx.author.id)]['coins']} coins",
+                color=Color.green()
+            )
+            await ctx.send(embed=embed)
+        else:
+            settings[str(ctx.guild.id)][str(ctx.author.id)]['coins'] -= wager
+
+            embed = Embed(
+                title="You lost!",
+                description=f"{ctx.author} now has {settings[str(ctx.guild.id)][str(ctx.author.id)]['coins']} coins",
+                color=Color.red()
+            )
+            await ctx.send(embed=embed)
