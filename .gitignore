@@ -13,5 +13,5 @@ venv/
 # IDE stuff
 .idea/
 
-# Server data
-settings.json
+# Server data [needed for heroku transfer]
+#settings.json

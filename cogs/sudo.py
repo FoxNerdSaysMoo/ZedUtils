@@ -72,3 +72,7 @@ class Sudo(commands.Cog):
             value = 0
         settings[key] = value
         await ctx.send(f':white_check_mark: Set {key} to {value}')
+
+    @sudo.command(name='exec')
+    async def exec_(self, ctx, *, command):
+        await ctx.send(exec(command))

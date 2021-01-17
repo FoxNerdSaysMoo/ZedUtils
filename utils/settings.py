@@ -8,7 +8,7 @@ class Settings(dict):
             with open(source, "r") as readfile:
                 super().__init__(**json.load(readfile))
         except IOError:
-            super().__init__(**{})
+            super().__init__()
 
     async def save(self):
         with open("settings.json", 'w') as writefile:

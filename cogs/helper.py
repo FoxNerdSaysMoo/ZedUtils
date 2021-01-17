@@ -1,4 +1,4 @@
-from discord.ext.commands import errors
+from discord.ext.commands import errors, Cog
 from discord.ext import commands
 import discord
 from discord import Color
@@ -18,7 +18,7 @@ async def prefix_base(ctx):
         settings[gid]['prefixes'] = settings['default_prefix']
 
 
-class Helper(commands.Cog):
+class Helper(Cog):
     """helper"""
 
     def __init__(self, bot):
@@ -137,3 +137,8 @@ class Helper(commands.Cog):
                 raise errors.UserInputError('Invalid cog name')
 
             await ctx.send(embed=help_embed)
+
+    @Cog.listener()
+    async def on_message(self, message):
+        if self.bot.user.mentioned_in(message):
+            await message.send('You can get my help message using `>help`')
