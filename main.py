@@ -3,13 +3,12 @@ from utils import settings, prefix
 import os
 import discord
 
-
 intents = discord.Intents().all()
 
 
 class Bot(commands.Bot):
     settings['default_prefix'] = ['>']
-    settings['msg_timout'] = 5
+    settings['msg_timeout'] = 5
     settings['chess_challenge_timeout'] = 20
 
     def __init__(self):

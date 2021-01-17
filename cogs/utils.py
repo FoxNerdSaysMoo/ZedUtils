@@ -1,5 +1,5 @@
 from discord.ext.commands import Bot, Context, errors, Cog, command, group, has_permissions
-from discord import Embed, Member, Role, utils
+from discord import Embed, Member, Role, utils, Color
 
 
 def setup(bot: Bot):
@@ -22,6 +22,23 @@ class Utils(Cog):
             user = ctx.author
         await ctx.send(f'{str(user)}\'s pfp')
         await ctx.send(user.avatar_url)
+
+    @command(name='color')
+    @has_permissions(administrator=True)
+    async def color(self, ctx: Context, color: Color):
+        if ctx.message.reference is None:
+            raise errors.UserInputError('You must reply to a reaction role embed to use this command')
+
+        msg = await ctx.fetch_message(ctx.message.reference.message_id)
+
+        if msg.author.id != self.bot.user.id:
+            raise errors.UserInputError('`rr add` can only be used on messages sent by ZedUtils')
+
+        embed = msg.embeds[0]
+        embed.color = color
+
+        await msg.edit(embed=embed)
+        await ctx.message.delete()
 
     @group(name='rr')
     @has_permissions(administrator=True)

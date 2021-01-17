@@ -2,6 +2,7 @@ from discord.ext.commands import errors, Cog
 from discord.ext import commands
 import discord
 from discord import Color
+import asyncio
 
 
 def setup(bot):
@@ -141,4 +142,6 @@ class Helper(Cog):
     @Cog.listener()
     async def on_message(self, message):
         if self.bot.user.mentioned_in(message):
-            await message.channel.send('You can get my help message using `>help`')
+            msg = await message.channel.send('You can get my help message using `>help`')
+            await asyncio.sleep(settings['msg_timeout'])
+            await msg.delete()

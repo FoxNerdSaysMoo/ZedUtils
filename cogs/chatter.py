@@ -90,7 +90,7 @@ class Chatter(commands.Cog):
         voice_client.play(player, after=lambda a: voice_client.stop())
 
         print('done')
-        await asyncio.sleep(settings['msg_timout'])
+        await asyncio.sleep(settings['msg_timeout'])
         await playing.delete()
 
     @commands.command(name='rate')
