@@ -1,0 +1,24 @@
+{
+  "default_prefix": [">"],
+  "msg_timeout": 5,
+  "chess_challenge_timeout": 20,
+  "rand_items": [
+        ["Unicorn horn", 30],
+        ["Police cruiser", 60],
+        ["Brick", 100],
+        ["Diamond ring", 35],
+        ["Queen Elizabeth's staff", 1],
+        ["Maple syrup", 45],
+        ["Broken glass", 70]
+  ],
+  "default_economy": {
+        "coins": 0,
+        "medals": [0, 0, 0, 0],
+        "boosts": [],
+        "active_boosts": [],
+        "color": null,
+        "salary": 500,
+        "inventory": []
+    },
+  "interval_range": [40, 70]
+}

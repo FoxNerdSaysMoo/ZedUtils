@@ -8,23 +8,6 @@ import asyncio
 def setup(bot: Bot):
     global settings
     settings = bot.settings
-    settings['default_economy'] = {
-        'coins': 0,
-        'medals': (0, 0, 0, 0),
-        'boosts': [],
-        'active_boosts': [],
-        'color': None,
-        'salary': 500,
-        'inventory': [],
-    }
-
-    settings['rand_items'] = [
-        ["Unicorn horn", 30],
-        ["Police cruiser", 60],
-        ["Brick", 100],
-        ["Diamond ring", 35]
-    ]
-
     bot.add_cog(Economy(bot))
 
 
@@ -143,6 +126,8 @@ class Economy(Cog):
 
             await ctx.send(embed=embed)
 
+        await settings.save()
+
     @command(name='crime')
     @cooldown(60 * 30)
     async def crime(self, ctx, user: User):
@@ -179,11 +164,12 @@ class Economy(Cog):
         """Randomly summon items"""
         servers = self.bot.guilds
         numservers = len(servers)
-        interval = random.randint(200, 400) / numservers  # How often to summon a item
+        interval_range = settings['interval_range']
+        interval = random.randint(*interval_range) / numservers  # How often to summon a item
         while True:
             # Wait
             await asyncio.sleep(interval)
-            interval = random.randint(200, 400) / numservers
+            interval = random.randint(*interval_range) / numservers
 
             selserver = random.choice(servers)  # Randomly choose a server
 
@@ -215,9 +201,14 @@ class Economy(Cog):
                 settings[str(selserver.id)][str(user.id)] = settings['default_economy']
 
             inv = settings[str(selserver.id)][str(user.id)]['inventory']  # User's inventory
-            if item in inv:  # Add item counter if it it already in inventory
+            if item in dict(inv).keys():  # Add item counter if it it already in inventory
                 settings[str(selserver.id)][str(user.id)]['inventory'][inv.index(item)][1] += 1
             else:  # Create slot of not in inventory
                 settings[str(selserver.id)][str(user.id)]['inventory'].append([item, 1])
 
             await settings.save()  # Save settings
+
+    @command(name='create-item')
+    @cooldown(60 * 60)
+    async def item_create(self, ctx, name: str, weight: int):
+        ...

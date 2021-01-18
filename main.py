@@ -2,15 +2,15 @@ from discord.ext import commands
 from utils import settings, prefix
 import os
 import discord
+import json
 
 intents = discord.Intents().all()
 
+with open("config.json", "r") as readfile:
+    settings.update(json.load(readfile))
+
 
 class Bot(commands.Bot):
-    settings['default_prefix'] = ['>']
-    settings['msg_timeout'] = 5
-    settings['chess_challenge_timeout'] = 20
-
     def __init__(self):
         super(Bot, self).__init__(command_prefix=prefix.prefix(settings), intents=intents)
 

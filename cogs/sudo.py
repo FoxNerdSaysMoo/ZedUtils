@@ -15,7 +15,7 @@ class Sudo(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.owners = [515854207837011970]
+        self.owners = [515854207837011970, 301055957734129665]
 
     @commands.group(name='sudo')
     async def sudo(self, ctx):
