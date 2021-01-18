@@ -80,6 +80,8 @@ The wager will be given or removed from your bank.
 
 `work` - work and gain money (chance for promotion)
 
+`crime [user]` - try to steal coins from a user
+
 `coin-give [user] [amount]` - give coins to user
 
 `coin-remove [user] [amount]` - remove coins from user

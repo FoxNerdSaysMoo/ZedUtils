@@ -75,4 +75,9 @@ class Sudo(commands.Cog):
 
     @sudo.command(name='exec')
     async def exec_(self, ctx, *, command):
-        await ctx.send(exec(command))
+        """Execute code"""
+        output = exec(command)
+        if output:
+            await ctx.send(output)
+        else:
+            await ctx.send(":white_check_mark: Done")

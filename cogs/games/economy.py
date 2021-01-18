@@ -1,5 +1,5 @@
 from utils.cooldown import cooldown
-from discord.ext.commands import command, Cog, Bot, has_permissions, errors
+from discord.ext.commands import command, Cog, Bot, errors
 from discord import User, Embed, Color
 import random
 import asyncio
@@ -47,7 +47,6 @@ class Economy(Cog):
 
         embed = Embed(
             title=f'{user}\'s bank',
-            description="\u200b",
             color=getattr(Color, stats['color'])() if stats['color'] else Embed.Empty
         )
 
@@ -73,36 +72,6 @@ class Economy(Cog):
         embed.set_author(name='ZedUtils economy',
                          url="https://github.com/foxnerdsaysmoo/zedutils#economy",
                          icon_url=user.avatar_url)
-
-        await ctx.send(embed=embed)
-
-    @command(name='coin-give', aliases=['coins-give', 'coin-add', 'coins-add'])
-    @has_permissions(administrator=True)
-    async def coin_give(self, ctx, user: User, amount: int):
-        """Give coins to a user"""
-        if str(user.id) not in settings[str(ctx.guild.id)]:
-            settings[str(ctx.guild.id)][str(user.id)] = settings['default_economy']
-
-        settings[str(ctx.guild.id)][str(user.id)]['coins'] += abs(amount)
-
-        embed = Embed(title="Coins added",
-                      description=f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins",
-                      color=Color.green())
-
-        await ctx.send(embed=embed)
-
-    @command(name='coin-remove', aliases=['coins-remove', 'coin-take'])
-    @has_permissions(administrator=True)
-    async def coin_remove(self, ctx, user: User, amount: int):
-        """Remove coins from user"""
-        if str(user.id) not in settings[str(ctx.guild.id)]:
-            settings[str(ctx.guild.id)][str(user.id)] = settings['default_economy']
-
-        settings[str(ctx.guild.id)][str(user.id)]['coins'] -= abs(amount)
-
-        embed = Embed(title="Coins removed",
-                      description=f"{user} now has {settings[str(ctx.guild.id)][str(user.id)]['coins']} coins",
-                      color=Color.red())
 
         await ctx.send(embed=embed)
 
@@ -177,6 +146,7 @@ class Economy(Cog):
     @command(name='crime')
     @cooldown(60 * 30)
     async def crime(self, ctx, user: User):
+        """Try to steal from a user"""
         if str(user.id) not in settings[str(ctx.guild.id)]:
             settings[str(ctx.guild.id)][str(user.id)] = settings['default_economy']
         if str(ctx.author.id) not in settings[str(ctx.guild.id)]:
