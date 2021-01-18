@@ -30,7 +30,7 @@ class Chess(Cog):
         await chal.add_reaction('❌')
 
         def react(reaction, user):
-            return user.id == opponent.id and str(reaction) in ['❌', '✅']
+            return user.id == opponent.id and str(reaction) in ['❌', '✅'] and reaction.message.id == chal.id
 
         try:
             reaction, user = await self.bot.wait_for('reaction_add',

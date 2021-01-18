@@ -87,5 +87,7 @@ class ErrorHandler(Cog):
     async def handle_cooldown_error(self, ctx: Context, exception: errors.CommandOnCooldown):
         await send_error_embed(
             ctx,
-            "This command is on cooldown for another {} seconds. Please try again later.".format(exception.retry_after)
+            "This command is on cooldown for another {} minutes. Please try again later.".format(
+                int(exception.retry_after/60)
+            )
         )
