@@ -75,7 +75,8 @@ class Chess(Cog):
         svg2png(bytestring=chess.svg.board(board), write_to=f'chess/{ctx.channel.id}.png')
         await ctx.send(f"{str(curr_player)}'s turn!", file=File(f'chess/{ctx.channel.id}.png'))
 
-        while 1:
+        self.playing = True
+        while self.playing:
             try:
                 msg = await self.bot.wait_for('message', check=valid_move, timeout=300.0)
             except asyncio.TimeoutError:
@@ -109,6 +110,11 @@ class Chess(Cog):
             color=Color.light_grey()
         )
         await ctx.send(embed=embed)
+
+    @command()
+    async def win(self, ctx):
+        self.playing = False
+        ctx.send(f'<@!{ctx.author.id}>` Won! Their opponent has no comment at this time. Stay tuned.`')
 
     async def checkmate(self, board, ctx, p1, p2, wager):
         result = board.result()

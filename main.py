@@ -4,9 +4,13 @@ import os
 import discord
 import json
 
+
+economy = settings("data/economy.json")
+settings = settings("data/settings.json")
+
 intents = discord.Intents().all()
 
-with open("config.json", "r") as readfile:
+with open("data/config.json", "r") as readfile:
     settings.update(json.load(readfile))
 
 
@@ -17,6 +21,7 @@ class Bot(commands.Bot):
         self.remove_command('help')
 
         self.settings = settings
+        self.economy = economy
 
         self.cogs_list = [
             "cogs.sudo",
@@ -25,7 +30,7 @@ class Bot(commands.Bot):
             "cogs.errors",
             "cogs.games.chess",
             "cogs.utils",
-            "cogs.games.economy",
+            "cogs.games.economy.economy",
         ]
 
         for cog in self.cogs_list:

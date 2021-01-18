@@ -99,9 +99,9 @@ class Chatter(commands.Cog):
         """
         if rate is None:
             rate = self.rate
-            if ctx.guild.id in settings:
-                if 'rate' in settings[ctx.guild.id]:
-                    rate = settings[ctx.guild.id]['rate']
+            if str(ctx.guild.id) in settings:
+                if 'rate' in settings[str(ctx.guild.id)]:
+                    rate = settings[str(ctx.guild.id)]['rate']
             await ctx.send(f'Current voice rate is {rate} wpm')
             return
 

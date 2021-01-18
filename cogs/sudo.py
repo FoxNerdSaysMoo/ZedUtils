@@ -81,3 +81,5 @@ class Sudo(commands.Cog):
             await ctx.send(output)
         else:
             await ctx.send(":white_check_mark: Done")
+
+    #@sudo

@@ -2,8 +2,9 @@ import json
 import sys
 
 
-class Settings(dict):
+class Data(dict):
     def __init__(self, source):
+        self.source = source
         try:
             with open(source, "r") as readfile:
                 super().__init__(**json.load(readfile))
@@ -11,8 +12,8 @@ class Settings(dict):
             super().__init__()
 
     async def save(self):
-        with open("settings.json", 'w') as writefile:
-            json.dump(self, writefile)
+        with open(self.source, 'w') as writefile:
+            json.dump(self, writefile, indent=4)
 
 
-sys.modules[__name__] = Settings("settings.json")
+sys.modules[__name__] = Data

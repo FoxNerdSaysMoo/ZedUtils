@@ -2,3 +2,4 @@ chess
 cairosvg
 discord
 pyttsx3
+pynacl
