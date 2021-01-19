@@ -1,4 +1,4 @@
-language = "python3"
+language = "bash"
 run = "python main.py"
 
 onBoot = "pip install -r requirements.txt"

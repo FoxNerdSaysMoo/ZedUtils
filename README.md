@@ -87,3 +87,8 @@ The wager will be given or removed from your bank.
 `coin-remove [user] [amount]` - remove coins from user
 
 `coin-flip [wager]` - take a chance to win or lose a wager
+
+### AuctionHouse
+aliases: `ah`
+
+`auction `

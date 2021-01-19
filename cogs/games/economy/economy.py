@@ -13,7 +13,7 @@ def setup(bot: Bot):
 
 
 class Economy(Cog):
-    """Economy"""
+    """economy"""
     def __init__(self, bot: Bot):
         self.bot = bot
 
@@ -64,9 +64,16 @@ class Economy(Cog):
         if user is None:
             user = ctx.author
 
-        inventory = Inventory(economy[str(user.id)]['inventory'], economy['suffixes'])
+        if str(user.id) not in economy:
+            economy[str(user.id)] = economy['default_economy']
+            economy.save()
 
-        embed = Embed(title=f"{user}'s Inventory", description=str(inventory))
+        inventory = Inventory(economy[str(user.id)]['inventory'], economy['suffixes'])
+        stats = economy[str(user.id)]
+
+        embed = Embed(title=f"{user}'s Inventory",
+                      description=str(inventory),
+                      color=getattr(Color, stats['color'])() if stats['color'] else Embed.Empty)
 
         embed.set_author(name='ZedUtils economy',
                          url="https://github.com/foxnerdsaysmoo/zedutils#economy",
@@ -135,7 +142,7 @@ class Economy(Cog):
             await ctx.send(embed=embed)
 
         elif random.choice([False]*24 + [True]):
-            economy[str(ctx.author.id)]['salary'] -= random.randint(40, 150)
+            economy[str(ctx.author.id)]['salary'] -= random.randint(40, 130)
             salary = economy[str(ctx.author.id)]['salary']
 
             embed = Embed(title="You were demoted.", description=f"Your new salary is {salary}.", color=Color.red())
@@ -144,7 +151,7 @@ class Economy(Cog):
 
         economy.save()
 
-    @command(name='crime')
+    @command(name='rob')
     @cooldown(60 * 30)
     async def crime(self, ctx, user: User):
         """Try to steal from a user"""
@@ -154,10 +161,10 @@ class Economy(Cog):
             economy[str(ctx.author.id)] = economy['default_economy']
 
         stats = economy[str(user.id)]
-        percentage = random.randint(0, 20)
+        percentage = random.randint(5, 30)
         amount = int(stats['coins']*percentage/100)
 
-        if random.choice([False]*5 + [True]*7):
+        if random.choice([False]*5 + [True]*8):
             economy[str(ctx.author.id)]['coins'] += amount
             auth_stats = economy[str(ctx.author.id)]
 
@@ -167,7 +174,7 @@ class Economy(Cog):
             await ctx.send('Success!', embed=embed)
 
         else:
-            economy[str(ctx.author.id)]['coins'] -= int(amount * 1.2)
+            economy[str(ctx.author.id)]['coins'] -= int(amount * 1.5)
             auth_stats = economy[str(ctx.author.id)]
 
             embed = Embed(title=f"You were caught stealing! You lost {int(amount * 1.2)} coins!",
@@ -208,7 +215,7 @@ class Economy(Cog):
                 return user.id != self.bot.user.id and reaction.emoji == '✅' and reaction.message.id == msg.id
 
             try:
-                reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=15)  # Wait for a reaction
+                reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=economy['rand_item_timeout'])  # Wait for a reaction
             except asyncio.TimeoutError:
                 await msg.delete()  # Delete artifact message if it isn't reacted to
                 continue
@@ -225,11 +232,15 @@ class Economy(Cog):
                 inv[artifact] = 1
             economy.save()  # Save economy
 
-    @command(name='make-artifact', aliases=['create-artifact', 'create'])
+    @command(name='create-artifact', hidden=True)
     async def create_artifact(self, ctx, name: str, weight: int):
-        """sudo: Create atrifact"""
-        if ctx.author.id in self.bot.cogs["Sudo"].owners:
-            pass
+        if ctx.author.id not in self.bot.cogs["Sudo"].owners:
+            raise errors.NotOwner
+
+        economy["rand_items"][name] = weight
+        economy.save()
+
+        await ctx.send(f":white_check_mark: Added artifact '{name}' with weight {weight}.")
 
     @command(name='suggest-item')
     @cooldown(60 * 60)

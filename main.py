@@ -12,6 +12,7 @@ settings = settings("data/settings.json")
 
 atexit.register(economy.save)
 atexit.register(settings.save)
+atexit.register(auctionhouse.save)
 
 intents = discord.Intents().all()
 
@@ -40,7 +41,8 @@ class Bot(commands.Bot):
             "cogs.games.chess",
             "cogs.utils",
             "cogs.games.economy.economy",
-            "cogs.games.economy.auction"
+            "cogs.games.economy.auction",
+            "cogs.games.economy.shop"
         ]
 
         for cog in self.cogs_list:

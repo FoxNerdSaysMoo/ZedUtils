@@ -3,6 +3,7 @@
         ">"
     ],
     "msg_timeout": 5,
+    "rand_item_timeout": 15,
     "chess_challenge_timeout": 20,
     "default_economy": {
         "coins": 1000,
@@ -17,6 +18,17 @@
         "color": null,
         "salary": 500,
         "inventory": {}
+    },
+    "embed_colors": {
+        "red": 5000,
+        "orange": 10000,
+        "gold": 20000,
+        "green": 30000,
+        "dark_green": 50000,
+        "blue": 75000,
+        "dark_blue": 100000,
+        "magenta": 150000,
+        "random": 1000000
     },
     "suffixes": {
         "Unicorn Horn": " \ud83e\udd84",

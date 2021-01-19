@@ -14,12 +14,11 @@ class Inventory:
 
     def __str__(self):
         return '\n'.join(
-            [f'{y}x {x + self.suffixes[x] if x in self.suffixes else x}' for x, y in self.contents.items()]
+            [f'{y}x {x + self.suffixes[x] if x in self.suffixes else x}' for x, y in self.contents.items() if y > 0]
         )
 
     def __contains__(self, item):
         if isinstance(item, str):
-            print("called str")
             return self.contents.keys().__contains__(item)
         else:
             pair = tuple(item)
