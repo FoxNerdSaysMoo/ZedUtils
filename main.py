@@ -3,15 +3,23 @@ from utils import settings, prefix
 import os
 import discord
 import json
+import atexit
 
 
 economy = settings("data/economy.json")
+auctionhouse = settings("data/auctions.json")
 settings = settings("data/settings.json")
+
+atexit.register(economy.save)
+atexit.register(settings.save)
 
 intents = discord.Intents().all()
 
 with open("data/config.json", "r") as readfile:
-    settings.update(json.load(readfile))
+    config = json.load(readfile)
+
+settings.update(config)
+economy.update(config)
 
 
 class Bot(commands.Bot):
@@ -22,6 +30,7 @@ class Bot(commands.Bot):
 
         self.settings = settings
         self.economy = economy
+        self.auctionhouse = auctionhouse
 
         self.cogs_list = [
             "cogs.sudo",
@@ -31,6 +40,7 @@ class Bot(commands.Bot):
             "cogs.games.chess",
             "cogs.utils",
             "cogs.games.economy.economy",
+            "cogs.games.economy.auction"
         ]
 
         for cog in self.cogs_list:

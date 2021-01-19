@@ -114,7 +114,7 @@ class Chess(Cog):
     @command()
     async def win(self, ctx):
         self.playing = False
-        ctx.send(f'<@!{ctx.author.id}>` Won! Their opponent has no comment at this time. Stay tuned.`')
+        await ctx.send(f'<@!{ctx.author.id}>`Won! Their opponent has no comment at this time. Stay tuned.`')
 
     async def checkmate(self, board, ctx, p1, p2, wager):
         result = board.result()

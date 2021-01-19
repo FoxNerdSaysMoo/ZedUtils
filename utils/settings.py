@@ -11,7 +11,7 @@ class Data(dict):
         except IOError:
             super().__init__()
 
-    async def save(self):
+    def save(self):
         with open(self.source, 'w') as writefile:
             json.dump(self, writefile, indent=4)
 

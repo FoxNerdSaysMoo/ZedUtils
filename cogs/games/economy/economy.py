@@ -1,6 +1,7 @@
 from utils.cooldown import cooldown
 from discord.ext.commands import command, Cog, Bot, errors
 from discord import User, Embed, Color
+from .base_economy import Inventory
 import random
 import asyncio
 
@@ -24,7 +25,7 @@ class Economy(Cog):
 
         if str(user.id) not in economy:
             economy[str(user.id)] = economy['default_economy']
-            await economy.save()
+            economy.save()
 
         stats = economy[str(user.id)]
 
@@ -43,14 +44,29 @@ class Economy(Cog):
         """
         embed.add_field(name="Medals", value=medals)
 
-        inventory = "\n".join([f'{x}x {y}' for y, x in stats['inventory']])
-        embed.add_field(name="Inventory", value=inventory if inventory else "None :(")
+        inventory = Inventory(stats['inventory'], economy['suffixes'])
+        embed.add_field(name="Inventory", value=f"{inventory.len()} artifacts")
 
         boosts = ", ".join([f'{x}x {y}' for y, x in stats['boosts']])
         embed.add_field(name="Boosts", value=boosts if boosts else "None :(")
 
         active_boosts = ", ".join([f"{y}s of {x}" for x, y in stats['active_boosts']])
         embed.add_field(name="Active boosts", value=active_boosts if active_boosts else "None :(")
+
+        embed.set_author(name='ZedUtils economy',
+                         url="https://github.com/foxnerdsaysmoo/zedutils#economy",
+                         icon_url=user.avatar_url)
+
+        await ctx.send(embed=embed)
+
+    @command(name='inventory')
+    async def inventory(self, ctx, user: User = None):
+        if user is None:
+            user = ctx.author
+
+        inventory = Inventory(economy[str(user.id)]['inventory'], economy['suffixes'])
+
+        embed = Embed(title=f"{user}'s Inventory", description=str(inventory))
 
         embed.set_author(name='ZedUtils economy',
                          url="https://github.com/foxnerdsaysmoo/zedutils#economy",
@@ -126,7 +142,7 @@ class Economy(Cog):
 
             await ctx.send(embed=embed)
 
-        await economy.save()
+        economy.save()
 
     @command(name='crime')
     @cooldown(60 * 30)
@@ -171,11 +187,13 @@ class Economy(Cog):
             await asyncio.sleep(interval)
             interval = random.randint(*interval_range) / numservers
 
-            selserver = random.choice(servers)  # Randomly choose a server
+            selserver = random.choices(servers,
+                                       weights=[len(x.members) for x in servers],
+                                       k=1)[0]  # Randomly choose a server
 
             artifact = random.choices(
-                [x for x, y in economy['rand_artifacts']],
-                weights=[y for x, y in economy['rand_artifacts']],
+                list(economy['rand_artifacts'].keys()),
+                weights=list(economy['rand_artifacts'].values()),
                 k=1,
             )[0]  # Randomly choose a artifact using weights
 
@@ -183,7 +201,7 @@ class Economy(Cog):
                           description="React with :white_check_mark: to claim!",
                           color=Color.green())
 
-            msg = await selserver.text_channels[0].send(embed=embed)  # Send the artifact embed | Needs improvement
+            msg = await selserver.text_channels[0].send(embed=embed)
             await msg.add_reaction('✅')  # Add checkmark reaction
 
             def check(reaction, user):
@@ -201,12 +219,11 @@ class Economy(Cog):
                 economy[str(user.id)] = economy['default_economy']
 
             inv = economy[str(user.id)]['inventory']  # User's inventory
-            if artifact in dict(inv).keys():  # Add artifact counter if it it already in inventory
-                economy[str(user.id)]['inventory'][inv.index(artifact)][1] += 1
-            else:  # Create slot of not in inventory
-                economy[str(user.id)]['inventory'].append([artifact, 1])
-
-            await economy.save()  # Save economy
+            if artifact in inv:
+                inv[artifact] += 1
+            else:
+                inv[artifact] = 1
+            economy.save()  # Save economy
 
     @command(name='make-artifact', aliases=['create-artifact', 'create'])
     async def create_artifact(self, ctx, name: str, weight: int):

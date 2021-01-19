@@ -1,0 +1,48 @@
+{
+    "default_prefix": [
+        ">"
+    ],
+    "msg_timeout": 5,
+    "chess_challenge_timeout": 20,
+    "default_economy": {
+        "coins": 1000,
+        "medals": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "boosts": [],
+        "active_boosts": [],
+        "color": null,
+        "salary": 500,
+        "inventory": {}
+    },
+    "suffixes": {
+        "Unicorn Horn": " \ud83e\udd84",
+        "Police Cruiser": " \ud83d\ude93",
+        "Red Brick": " \ud83e\uddf1",
+        "Diamond ring": " \ud83d\udc8d",
+        "Queen Elizabeth's Staff": " \ud83d\udc51",
+        "Maple syrup": " \ud83c\udf41",
+        "Broken Spyglass": " \ud83d\udc53",
+        "Magic Sword of Happiness and Light": " \u2694\ufe0f",
+        "The Daylight Dagger": " \ud83d\udde1\ufe0f"
+    },
+    "rand_artifacts": {
+        "Unicorn Horn": 30,
+        "Police Cruiser": 60,
+        "Red Brick": 100,
+        "Diamond ring": 35,
+        "Queen Elizabeth's Staff": 1,
+        "Maple syrup": 45,
+        "Broken Spyglass": 70,
+        "Magic Sword of Happiness and Light": 5,
+        "The Daylight Dagger": 10,
+        "The Breastplate of Hagaratha": 1
+    },
+    "interval_range": [
+        300,
+        500
+    ]
+}
